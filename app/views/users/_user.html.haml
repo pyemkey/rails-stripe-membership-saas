@@ -1,0 +1,12 @@
+.modal.fade{ id: "role-options-#{user.id}", style: "display: none;"}
+  = simple_form_for user, url: user_path(user), html: { method: :put} do |f|
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %a{:href => "#", "data-dismiss" => "modal"} x
+          %h3.modal-title Change Role
+        .modal-body
+          = f.input :role_ids, collection: Role.all, as: :radio_buttons, label_method: lambda { |t| t.name.titleize }, label: false, item_wrapper_class: "inline", checked: user.role_ids.first
+        .modal-footer
+          = f.submit "Change Role", class: "btn"
+          %a{:href => "#", "data-dismiss" => "modal"} Close 
