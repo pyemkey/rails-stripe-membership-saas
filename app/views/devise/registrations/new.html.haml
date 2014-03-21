@@ -1,13 +1,35 @@
-%h2 Sign up
-= simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => {:class => 'card_form form-vertical' }) do |f|
-  %h3
-    = params[:plan].titleize if params[:plan]
-    Subscription Plan
-  = hidden_field_tag 'plan', params[:plan]
-  = f.error_notification
-  = display_base_errors resource
-  = f.input :name, :autofocus => true
-  = f.input :email, :required => true
-  = f.input :password, :required => true
-  = f.input :password_confirmation, :required => true
-  = f.button :submit, 'Sign up', :class => 'btn-primary'
+- content_for :head do
+  = tag :meta, name: "stripe-key", content: STRIPE_PUBLIC_KEY
+.authform
+  %h2 Sign up
+  #stripe_error.alert.alert-error{style: "display:none"}
+
+  = simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => {:class => 'card_form form-vertical' }) do |f|
+    %h3
+      = params[:plan].titleize if params[:plan]
+      Subscription Plan
+    = hidden_field_tag 'plan', params[:plan]
+    = f.error_notification
+    = display_base_errors resource
+    = f.input :name, :autofocus => true
+    = f.input :email, :required => true
+    = f.input :password, :required => true
+    = f.input :password_confirmation, :required => true
+    - if @user.stripe_token
+      %p Credit card acceptance is pending.
+    - else
+      .field.form-group
+        = label_tag :card_number, "Credit Card Number", class: "control-label"
+        = text_field_tag :card_number, nil, name: nil, class: "form-control"
+      .field.form-group
+        = label_tag :card_code, "Card Security Code (CVV)", class: "control-label"
+        = text_field_tag :card_code, nil, name: nil, class: "form-control"
+      .field.form-group
+        = label_tag :card_month, "Card Expiration", class: "control-label"
+        .date
+          = select_month nil, {add_month_numbers: true}, {name: nil, id: "card_month"}
+          = select_year nil, {start_year: Date.today.year, end_year: Date.today.year + 10}, {name: nil, id: "card_year"}
+      .field.form-group
+        = f.input :coupon, label: "Promotial Coupon (if any)", input_html: {class: "form-control"}
+    = f.hidden_field :stripe_token
+    = f.button :submit, 'Sign up', :class => 'btn-primary'

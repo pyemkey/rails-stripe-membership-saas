@@ -1,4 +1,4 @@
-class RegistrationsController < ApplicationController
+class RegistrationsController < Devise::RegistrationsController
 
   def new
     @plan = params[:plan]
