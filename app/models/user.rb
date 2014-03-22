@@ -84,6 +84,11 @@ class User < ActiveRecord::Base
     false
   end
 
+  def expire
+    UserMailer.expire_email(self).deliver
+    destroy
+  end
+
   def assign_role
     self.add_role :user if self.roles.first.nil?
   end
