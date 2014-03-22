@@ -21,7 +21,7 @@ class User < ActiveRecord::Base
       customer.update_subscription(plan: role.name)
     end
     true
-  rescue Stripe:StripeError => e
+  rescue Stripe::StripeError => e
     logger.error "Stripe Error: " + e.message
     errors.add :base, "Unable to update your subscription. #{e.message}"
     false
