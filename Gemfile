@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 ruby '2.0.0'
 gem 'rails', '4.0.2'
-gem 'sqlite3'
+
 gem 'sass-rails', '~> 4.0.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
@@ -18,6 +18,7 @@ gem 'thin'
 gem 'stripe'
 gem 'stripe_event'
 gem 'pry'
+gem 'newrelic_rpm'
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller', :platforms=>[:mri_19, :mri_20, :rbx]
@@ -28,9 +29,14 @@ end
 group :development, :test do
   gem 'factory_girl_rails'
   gem 'rspec-rails'
+  gem 'sqlite3'
 end
 group :test do
   gem 'capybara'
   gem 'database_cleaner', '1.0.1'
   gem 'email_spec'
+end
+
+group :production do
+  gem 'pg'
 end
